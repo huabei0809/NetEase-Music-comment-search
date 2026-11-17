@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="OczyUfMRie1oV4ys5rCkv0">
+<head data-page-node-id="8zjq8BzK2AIofBuMZRZKPJ">
+<meta charset="utf-8" data-page-node-id="OrbP6ZTmtqZettQVHwzd7O">
+<meta name="viewport" content="width=device-width, initial-scale=1" data-page-node-id="AvW9iqj5ux3Qd9Y3L6VOhH">
+<title>网易云评论检索器 · 本地版</title>
+<link rel="stylesheet" href="static/style.css" data-page-node-id="n2EkLVHin7plv2PtvLk4ks">
+</head>
+<body data-page-node-id="BludHnjM4BF3pcjCLiFM2U">
+
+<header class="topbar" data-page-node-id="bmaqOpzXnZwvAVVlHySNld">
+  <div class="brand" data-page-node-id="aWmxBYCZbYTiu85ehUE0ca">
+    <span class="logo" data-page-node-id="2L4LsEP4qWkar9r5WRBbnD">♪</span>
+    <div data-page-node-id="4JIYDCfH5a6luxCB76AGF4">
+      <h1 data-page-node-id="2wBepjm7FoN6YxHHQqV9Px">网易云评论检索器</h1>
+      <p class="sub" data-page-node-id="JzybUKBm3e9iYabgq9OfU7">输入歌曲 + 目标用户，自动扫全量评论并筛出命中</p>
+    </div>
+  </div>
+  <div class="tag-local" id="healthTag" data-page-node-id="UINLywM1v7RTL5vRdoPEGZ">
+    <span class="dot" data-page-node-id="2L5jw9D6ddwrriv5eE9F7c"></span>纯本地运行 · 不调用 AI
+  </div>
+</header>
+
+<main data-page-node-id="msn9lITvnHW92NiJJhlRy4">
+
+  <!-- ============================ 第一步：输入 ============================ -->
+  <section class="card" data-page-node-id="ZNli5lCr4eqvc3JpGuHmlc">
+    <div class="card-head" data-page-node-id="OVfWJ84Usxox7UnMh5i1Ur">
+      <span class="step" data-page-node-id="XaaFyafmnj5fIkwuYk7gKF">1</span>
+      <h2 data-page-node-id="X8eLzD3pnJ0CjgopV1DBA0">输入检索条件</h2>
+    </div>
+
+    <label class="field" data-page-node-id="krrDIcQWE4h9JR9jmhaXzL">
+      <span class="label" data-page-node-id="MqmZtgdJodAEtrQKY46SsS">歌曲 / 歌单 / 专辑<span class="hint" data-page-node-id="ikfrGvgf2K5j2QRvOhhHZc">歌名、ID、链接都行，一行一个</span></span>
+      <textarea id="query" rows="4" spellcheck="false"
+        placeholder="向阳而生&#10;2006484446&#10;album:156507145&#10;playlist:3778678&#10;https://music.163.com/song?id=2006484446"></textarea>
+      <span class="hint" data-page-node-id="izJ8QCxZedpuwdsYGJFJjc">纯数字 ID 是有歧义的（歌单和专辑可能撞号），可用 <code data-page-node-id="sXtjLqu5L0sL1gzBJhVNGn">song:</code> / <code data-page-node-id="yaS7IEKhDFELKAa0vqeEbx">playlist:</code> / <code data-page-node-id="B4QCfgLGQQzejHjqy6ufE9">album:</code> 前缀强制指定；不带前缀时按 歌曲 → 歌单 → 专辑 顺序试探，解析结果会写在下方提示里。</span>
+    </label>
+
+    <div class="row" data-page-node-id="tAWsOulCJHi8mmJnK8KSwr">
+      <label class="field grow" data-page-node-id="1d3maRU1MW2DJI8uU7BPPD">
+        <span class="label" data-page-node-id="LsiQvlEkutw6o7xqOGhGwQ">用户 ID（uid）<span class="hint" data-page-node-id="8ndl8yV8cVYkfizEi3xiyH">最可靠，推荐填写</span></span>
+        <input id="uid" type="text" inputmode="numeric" placeholder="例如 123456789（多个用逗号分隔）" data-page-node-id="2mQxxypabpohizd0tYdNHP">
+      </label>
+      <label class="field grow" data-page-node-id="fG68qLJXjVBOl4IsrvpJjI">
+        <span class="label" data-page-node-id="MlF8gxhy0KPxr6aTyHe588">用户昵称<span class="hint" data-page-node-id="W07mRArBriOZ1RMxar61Lr">重名多，仅作辅助</span></span>
+        <input id="nickname" type="text" placeholder="例如 听歌的小明" data-page-node-id="oeOcEq4s6Bn9Dk6HBWLASv">
+      </label>
+    </div>
+    <label class="check" data-page-node-id="YHZvywINeqZGJDlfi9HP0U">
+      <input type="checkbox" id="fuzzy" data-page-node-id="1hgcSC0RujpFIYbHIyPpnu">
+      <span data-page-node-id="ATPZc9x8xCR4ceGoVdnQ09">昵称模糊匹配（包含即可命中）</span>
+    </label>
+
+    <details class="adv" data-page-node-id="q5LG2nNYD1MWq5eDjLEz3H">
+      <summary data-page-node-id="qc74qrwOHMZdAHz1Bmqko8">高级选项</summary>
+      <div class="adv-grid" data-page-node-id="2BC6ETrvvTYo0UqraAFbT5">
+        <label class="field" data-page-node-id="PmEjF78UnCgqQo1x3C36fJ">
+          <span class="label" data-page-node-id="CrVfRnlHReGMgG8yrVqekP">并发线程数</span>
+          <select id="workers" data-page-node-id="q4M7LiFl9UHRgvZVsfLnlE">
+            <option value="1" data-page-node-id="1AFacUsw63a8z0zNCcJyGT">1（最稳）</option>
+            <option value="2" data-page-node-id="SGGxGUbnWigFjpRzQGvALf">2</option>
+            <option value="3" selected data-page-node-id="agcotGdQEQRsYqvV20lxIF">3（推荐）</option>
+            <option value="4" data-page-node-id="j1j8Z4U1MAN4ZsXALmKaFq">4</option>
+          </select>
+        </label>
+        <label class="field" data-page-node-id="zTGEea0kCiVteYwEZEdIUZ">
+          <span class="label" data-page-node-id="FiXdntGXQhmhoW3MDITDh7">请求间隔（秒）</span>
+          <input id="interval" type="number" value="0.35" min="0.1" max="3" step="0.05" data-page-node-id="uy6lI8wMKxzQGiF8LbbHL7">
+        </label>
+        <label class="field" data-page-node-id="Ifw2gIL5kXm3X2DxQ4JoPr">
+          <span class="label" data-page-node-id="cQKXlxFc3NHiOlSnsESjrM">每首最多翻页<span class="hint" data-page-node-id="Kq96KStBiNlf10HVc0QkBO">0 = 全量</span></span>
+          <input id="maxPages" type="number" value="0" min="0" step="1" data-page-node-id="ut06LZA7elMMOhBei4AOUK">
+        </label>
+        <label class="field" data-page-node-id="02nl2nNfP2O7JpzC963LFz">
+          <span class="label" data-page-node-id="EK8ezxMn1HOM1uHh70jndz">登录 Cookie<span class="hint" data-page-node-id="eoAqvPpgopnVjExLAt3koP">可选，降低风控</span></span>
+          <input id="cookie" type="password" placeholder="MUSIC_U=xxx; __csrf=yyy" data-page-node-id="IisQJ1mLMpAVFnc5V6wOoC">
+        </label>
+      </div>
+      <div class="adv-checks" data-page-node-id="ADryF9gP6Yz1kMwXrE3X5M">
+        <label class="check" data-page-node-id="stAA2iOIMiw8TbFTiKgLbZ"><input type="checkbox" id="stopOnMatch" data-page-node-id="jW51UxiQdBcpKD6MlNHt3n"><span data-page-node-id="R6l1hAyE6C285S6eG4WZ8r">某首歌命中后立即停止该曲（更快，但可能漏掉该曲后续命中）</span></label>
+        <label class="check" data-page-node-id="1ntq3I9Jbn8EwIrWKWeIaO"><input type="checkbox" id="autoRescan" checked data-page-node-id="hoLwW3CVHhS66YkumvNvhY"><span data-page-node-id="E6olRz9ohcvE8BQ8kBhkt3">自动重扫「疑似被限流截断」的曲目（推荐开）</span></label>
+      </div>
+    </details>
+
+    <div class="actions" data-page-node-id="D8jIume1zfmNlRkXoFuNBT">
+      <button class="btn primary" id="btnResolve" data-page-node-id="wikMUgpp2ufmQUeg4xepAj">解析曲目</button>
+      <span class="inline-note" id="resolveNote" data-page-node-id="mjfanbUqrBWHFxu1D2BflG"></span>
+    </div>
+  </section>
+
+  <!-- ============================ 第二步：确认曲目 ============================ -->
+  <section class="card" id="cardSongs" hidden data-page-node-id="FtAEZ5urVura8OZZOoOHYc">
+    <div class="card-head" data-page-node-id="Z0uFLJONWfjvmtl4pQNjsC">
+      <span class="step" data-page-node-id="Q5CAAD6aOAvMtuck7WY7SW">2</span>
+      <h2 data-page-node-id="1EVmdajQIEE00oSPRpN2qU">确认要检索的曲目</h2>
+      <span class="count" id="songCount" data-page-node-id="hgAb9UHDFUudTE8dXNPpFM"></span>
+      <div class="head-actions" data-page-node-id="covctA7PyFrJIgJkq21TpP">
+        <button class="btn ghost sm" id="btnSelectAll" data-page-node-id="Rrgsw0p7s3qlQRUuCxsJr5">全选</button>
+        <button class="btn ghost sm" id="btnSelectNone" data-page-node-id="2DeavARwRlmo1NGxS4WZ00">全不选</button>
+      </div>
+    </div>
+    <ul class="song-list" id="songList" data-page-node-id="Xbi6Tpupj3E49Nf2Hz4wno"></ul>
+    <div class="actions" data-page-node-id="4FOvxTRDg1cGDRH2tL8nPp">
+      <button class="btn primary" id="btnStart" data-page-node-id="DcCexlY4aQ3rDSHwKkVp8a">开始检索</button>
+      <span class="inline-note" id="startNote" data-page-node-id="fmobLNd9UMEwtQ4MotAN7c"></span>
+    </div>
+  </section>
+
+  <!-- ============================ 第三步：进度 ============================ -->
+  <section class="card" id="cardProgress" hidden data-page-node-id="Dd27HyqB1b0LX2ODAXMfIR">
+    <div class="card-head" data-page-node-id="4wNdfqZ9HWFzqIFRlWEcus">
+      <span class="step" data-page-node-id="DsQk2qfRGRBeScHVb8wQsD">3</span>
+      <h2 data-page-node-id="uj8hG68tXFCh24gjr98mwL">检索进度</h2>
+      <span class="badge" id="jobStatus" data-page-node-id="RFzXN8dm8RHAjeSDLmF0FM">运行中</span>
+      <div class="head-actions" data-page-node-id="FpXgsWpr4vx8pSHIpzWBfL">
+        <button class="btn ghost sm" id="btnStop" data-page-node-id="8H9g8NwfFH18AJBuELeo6l">停止</button>
+      </div>
+    </div>
+    <div class="stats" id="statRow" data-page-node-id="JJZu1LmxLQomXGU79cGKMj"></div>
+    <ul class="progress-list" id="progressList" data-page-node-id="4gpA806a0KaPEZYNzhZmzv"></ul>
+  </section>
+
+  <!-- ============================ 第四步：结果 ============================ -->
+  <section class="card" id="cardResult" hidden data-page-node-id="unkBWe0y09Y8vmECA9qBCi">
+    <div class="card-head" data-page-node-id="8t9DjC66yLFPCkTrnWNEpI">
+      <span class="step" data-page-node-id="5TjhRrvhzgIhQDwwMLAOEh">4</span>
+      <h2 data-page-node-id="7GFwsvXEotHsk608OFQP8P">命中结果</h2>
+      <span class="count" id="hitCount" data-page-node-id="YLKKE9BEeL5UDkGGw4zze7"></span>
+      <div class="head-actions" data-page-node-id="kLZJQtNdjccVVM0mdAl7kQ">
+        <button class="btn ghost sm" id="btnCsv" data-page-node-id="jaCmtTWZemItRItmQAvOpl">导出 CSV</button>
+        <button class="btn ghost sm" id="btnJson" data-page-node-id="4UkUMd7GkKmOZ8YxRu8XDx">导出 JSON</button>
+      </div>
+    </div>
+    <div id="hitBody" data-page-node-id="wRh9f1lIPyqtWdqgWJ7Uks"></div>
+  </section>
+
+</main>
+
+<footer class="foot" data-page-node-id="3YyRhjiBS85jQc03kHK2UP">
+  本页面由本机 Python 服务提供，全部逻辑为确定性算法（加密请求 · cursor 翻页 · uid/昵称精确比对），无需任何 AI 参与。
+</footer>
+
+<script src="static/app.js"></script>
+</body>
+</html>
